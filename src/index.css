@@ -1,0 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Font-Family */
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* Custome Css */
+.nav-link {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #14b8a6;
+}
+
+.isActive {
+  color: #14b8a6;
+  border: 2px solid red;
+  background-color: #f3f4f6;
+}
