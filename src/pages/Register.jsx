@@ -2,6 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   // React Hook From
@@ -10,11 +13,13 @@ const Register = () => {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm();
   // Store district
   const [selectDistrict, setSelectDistrict] = useState("");
-
+  const axiosPublic = useAxiosPublic();
+  const navigate = useNavigate();
   //Data Fecth By upzila
   const { data, isLoading } = useQuery({
     queryKey: ["upazila"],
@@ -28,17 +33,31 @@ const Register = () => {
     console.log("object");
   }
 
-  const handleRegisterSubmit = (fromData) => {
-    console.log(fromData);
+  // From Input By Usre
+  const handleRegisterSubmit = async (fromData) => {
+    const { name, email, bloodGroup, district, upazila } = fromData;
 
-    const { name, email, bloodGroup, district, upazila, password } = fromData;
+    // User Register
+    const userRegister = {
+      name,
+      email,
+      bloodGroup,
+      district,
+      upazila,
+      role: "donor",
+      status: "active",
+    };
 
-    
-
-
+    const data = await axiosPublic.post("/users", userRegister);
+    console.log(data.data.insertedId);
+    if (data?.data?.insertedId) {
+      toast.success("Register Successful");
+      navigate("/");
+    }
+    // reset();
   };
 
-  // reat time  store
+  // real time  store
   watch("district");
   const password = watch("password");
 
