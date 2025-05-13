@@ -1,7 +1,13 @@
+import Banner from "../components/Banner";
+import ContactUs from "../components/ContactUs";
+import FeaturedSection from "../components/FeaturedSection";
+
 const Home = () => {
   return (
     <div>
-      <h1>Login</h1>
+      <Banner />
+      <FeaturedSection />
+      <ContactUs />
     </div>
   );
 };

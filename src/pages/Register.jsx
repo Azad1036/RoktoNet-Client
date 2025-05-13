@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import Loading from "../components/Loading";
 
 const Register = () => {
   // React Hook From
@@ -18,9 +20,14 @@ const Register = () => {
   } = useForm();
   // Store district
   const [selectDistrict, setSelectDistrict] = useState("");
+
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
-  //Data Fecth By upzila
+  // User Create Auth
+  const { createNewUser, setUser, intro } = useAuth();
+  // const { createNewUser, setUser, intro } = useContext(AuthContext);
+
+  //Data fetch By upzila
   const { data, isLoading } = useQuery({
     queryKey: ["upazila"],
     queryFn: async () => {
@@ -29,12 +36,8 @@ const Register = () => {
     },
   });
 
-  if (isLoading) {
-    console.log("object");
-  }
-
   // From Input By Usre
-  const handleRegisterSubmit = async (fromData) => {
+  const handleRegisterSubmit = (fromData) => {
     const { name, email, bloodGroup, district, upazila } = fromData;
 
     // User Register
@@ -48,14 +51,30 @@ const Register = () => {
       status: "active",
     };
 
-    const data = await axiosPublic.post("/users", userRegister);
-    console.log(data.data.insertedId);
-    if (data?.data?.insertedId) {
-      toast.success("Register Successful");
-      navigate("/");
-    }
-    // reset();
+    // User Register By Firebase
+    createNewUser(fromData.email, fromData.password)
+      .then(async (result) => {
+        const user = result.user;
+        setUser(user);
+        // User Register By DB
+        const data = await axiosPublic.post("/users", userRegister);
+        if (data?.data?.insertedId) {
+          navigate("/");
+          reset();
+        }
+        toast.success("Register Successful");
+      })
+      // Firebase Error
+      .catch((err) => {
+        {
+          err?.message && toast.error("Register failed try again");
+        }
+      });
   };
+
+  if (isLoading) {
+    <Loading />;
+  }
 
   // real time  store
   watch("district");
@@ -76,7 +95,7 @@ const Register = () => {
       <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-xl w-full max-w-3xl border border-gray-50 transition-all hover:shadow-2xl">
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-indigo-900 mb-2 tracking-tight">
-            Complete Registration
+            Complete Registration {intro}
           </h1>
           <p className="text-gray-500 text-sm sm:text-base">
             Fill in your details to get started
@@ -393,6 +412,16 @@ const Register = () => {
               Register
             </button>
           </div>
+          {/* Register Link */}
+          <p className=" text-sm text-gray-500 ">
+            Already have an account?{" "}
+            <a
+              href="/login"
+              className="text-indigo-600 hover:text-indigo-700 font-semibold"
+            >
+              Login here
+            </a>
+          </p>
         </form>
       </div>
     </div>

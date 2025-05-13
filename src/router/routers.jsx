@@ -4,6 +4,8 @@ import MainLayout from "../layouts/MainLayout";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Home from "../pages/Home";
+import SearchPage from "../pages/SearchPage";
+import BloodDonationRequests from "../pages/BloodDonationRequests";
 
 const routers = createBrowserRouter([
   {
@@ -22,6 +24,14 @@ const routers = createBrowserRouter([
         path: "register",
         element: <Register />,
       },
+      {
+        path: "searchpage",
+        element: <SearchPage/>
+      },
+      {
+        path: "bloodDonationRequests",
+        element: <BloodDonationRequests/>
+      }
     ],
   },
 ]);
