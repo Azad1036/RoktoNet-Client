@@ -33,14 +33,14 @@ const Navbar = () => {
                   <FaHeart className="mr-1" /> Donation Requests
                 </Link>
                 <Link
-                  href="#blog"
+                  to={"/blogDetailsPage"}
                   className="px-3 py-2 rounded-md text-sm font-medium hover:bg-red-800 flex items-center"
                 >
                   <FaBlog className="mr-1" /> Blog
                 </Link>
                 {user?.email && (
                   <Link
-                    href="#funding"
+                    to={"/fundingPage"}
                     className="px-3 py-2 rounded-md text-sm font-medium hover:bg-red-800"
                   >
                     Funding
@@ -77,7 +77,7 @@ const Navbar = () => {
                   {isDropdownOpen && (
                     <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                       <Link
-                        href="#dashboard"
+                        to={"/dashboard"}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
                         Dashboard

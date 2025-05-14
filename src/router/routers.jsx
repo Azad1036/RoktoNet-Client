@@ -6,6 +6,9 @@ import Register from "../pages/Register";
 import Home from "../pages/Home";
 import SearchPage from "../pages/SearchPage";
 import BloodDonationRequests from "../pages/BloodDonationRequests";
+import BlogDetailsPage from "../pages/BlogDetailsPage";
+import FundingPage from "../pages/FundingPage";
+import Dashboard from "../pages/Dashboard/AdminPage/Dashboard";
 
 const routers = createBrowserRouter([
   {
@@ -31,9 +34,20 @@ const routers = createBrowserRouter([
       {
         path: "bloodDonationRequests",
         element: <BloodDonationRequests/>
+      },{
+        path: "blogDetailsPage",
+        element: <BlogDetailsPage/>
+      },
+      {
+        path: "fundingPage",
+        element: <FundingPage/>
       }
     ],
   },
+  {
+    path: "dashboard",
+    element: <Dashboard/>
+  }
 ]);
 
 export default routers;

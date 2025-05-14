@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Loading from "../components/Loading";
 
+const imageHostingAPi = import.meta.env.VITE_Image_Hosting_API;
+const imageHostingKey = `https://api.imgbb.com/1/upload?key=${imageHostingAPi}`;
+
 const Register = () => {
   // React Hook From
   const {
@@ -25,7 +28,6 @@ const Register = () => {
   const navigate = useNavigate();
   // User Create Auth
   const { createNewUser, setUser, intro } = useAuth();
-  // const { createNewUser, setUser, intro } = useContext(AuthContext);
 
   //Data fetch By upzila
   const { data, isLoading } = useQuery({
@@ -37,39 +39,48 @@ const Register = () => {
   });
 
   // From Input By Usre
-  const handleRegisterSubmit = (fromData) => {
+  const handleRegisterSubmit = async (fromData) => {
     const { name, email, bloodGroup, district, upazila } = fromData;
+    // image upload to imgbb and then get an url
+    const imageFile = { image: fromData.image[0] };
+    const res = await axiosPublic.post(imageHostingKey, imageFile, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
 
-    // User Register
-    const userRegister = {
-      name,
-      email,
-      bloodGroup,
-      district,
-      upazila,
-      role: "donor",
-      status: "active",
-    };
-
-    // User Register By Firebase
-    createNewUser(fromData.email, fromData.password)
-      .then(async (result) => {
-        const user = result.user;
-        setUser(user);
-        // User Register By DB
-        const data = await axiosPublic.post("/users", userRegister);
-        if (data?.data?.insertedId) {
-          navigate("/");
-          reset();
-        }
-        toast.success("Register Successful");
-      })
-      // Firebase Error
-      .catch((err) => {
-        {
-          err?.message && toast.error("Register failed try again");
-        }
-      });
+    if (res.data.success) {
+      const userRegister = {
+        name,
+        email,
+        bloodGroup,
+        district,
+        upazila,
+        role: "donor",
+        status: "active",
+        image: res.data.data.display_url,
+      };
+      // // User Register By Firebase
+      createNewUser(fromData.email, fromData.password)
+        .then(async (result) => {
+          const user = result.user;
+          setUser(user);
+          // User Register By DB
+          const data = await axiosPublic.post("/users", userRegister);
+          console.log(data);
+          if (data?.data?.insertedId) {
+            navigate("/");
+            reset();
+          }
+          toast.success("Register Successful");
+        })
+        // Firebase Error
+        .catch((err) => {
+          {
+            err?.message && toast.error("Register failed try again");
+          }
+        });
+    }
   };
 
   if (isLoading) {
@@ -113,12 +124,14 @@ const Register = () => {
                 Upload Photo
               </span>
               <input
+                {...register("image", { required: "This is requried" })}
                 type="file"
                 id="avatar"
                 accept="image/*"
                 className="hidden"
               />
             </label>
+            <p className="text-red-500 text-sm mt-1">{errors.image?.message}</p>
           </div>
 
           {/* Personal Details Section */}
