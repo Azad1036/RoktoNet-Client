@@ -1,11 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Loading from "../components/Loading";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import {
+  FaUser,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaRegEnvelope,
+  FaTint,
+} from "react-icons/fa";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 const SearchPage = () => {
   const [selectDistrict, setSelectDistrict] = useState("");
+  const axiosPublic = useAxiosPublic();
+  const [donerlist, setDonerlist] = useState([]);
   // React Hook From
   const { register, handleSubmit, setValue, watch } = useForm();
 
@@ -25,8 +36,17 @@ const SearchPage = () => {
   // real time  store
   watch("district");
 
-  const handleRegisterSubmit = (fromData) => {
-    console.log(fromData);
+  const handleRegisterSubmit = async (fromData) => {
+    const quary = {};
+    // Find Quary
+    if (fromData.bloodGroup) quary.bloodGroup = fromData.bloodGroup;
+    if (fromData.district) quary.district = fromData.district;
+    if (fromData.upazila) quary.upazila = fromData.upazila;
+
+    // Data fecthing
+    const res = await axiosPublic.get("/searchDoner", { params: quary });
+    setDonerlist(res.data);
+    console.log(res);
   };
 
   // district change value
@@ -38,7 +58,6 @@ const SearchPage = () => {
 
   //find data by district to upazilas
   const upazilas = data && selectDistrict ? data[selectDistrict] || [] : [];
-  console.log(upazilas);
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       {/* Search Form */}
@@ -177,9 +196,64 @@ const SearchPage = () => {
         </div>
       </form>
 
-      {/* Placeholder for Results */}
-      <div className="mt-8 text-center py-12 bg-white rounded-xl">
-        <p className="text-gray-500 text-lg">Results will appear here...</p>
+      {/* Doner Card */}
+      <div>
+        {donerlist.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-5 gap-5">
+            {donerlist.map((donor) => (
+              <div
+                key={donor._id}
+                className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 group"
+              >
+                {/* Header with Blood Group */}
+                <div className="bg-red-50 p-4 flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-red-100 p-2 rounded-full">
+                      <FaUser className="text-red-600" />
+                    </div>
+                    <h3 className="font-bold text-lg text-gray-800">
+                      {donor.name}
+                    </h3>
+                  </div>
+                  <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1">
+                    <FaTint /> {donor.bloodGroup}
+                  </span>
+                </div>
+
+                {/* Details */}
+                <div className="p-4 space-y-3">
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <FaRegEnvelope className="text-red-500" />
+                    <span className="text-sm">{donor.email}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <FaMapMarkerAlt className="text-red-500" />
+                    <span className="text-sm">
+                      {donor.upazila}, {donor.district}
+                    </span>
+                  </div>
+
+                  <button className="w-full mt-4 bg-white border border-red-500 text-red-600 hover:bg-red-50 py-2 rounded-md flex items-center justify-center gap-2 transition-colors duration-200">
+                    <FaPhone /> Contact
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-10">
+            <div className="inline-flex items-center justify-center bg-red-50 w-16 h-16 rounded-full mb-4">
+              <HiOutlineExclamationCircle className="text-red-500 text-3xl" />
+            </div>
+            <h3 className="text-xl font-medium text-gray-700 mb-2">
+              No Donors Available
+            </h3>
+            <p className="text-gray-500 max-w-md mx-auto">
+              Currently there are no donors matching your criteria.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ const routers = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: "searchpage",
+        path: "searchdoner",
         element: <SearchPage/>
       },
       {

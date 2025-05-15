@@ -1,8 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Banner = () => {
-  const navigate = useNavigate();
-
+  
   return (
     <div className="relative bg-red-50 py-16 md:py-24">
       {/* Background pattern */}
@@ -21,15 +20,15 @@ const Banner = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => navigate("/register")}
+              <Link
+                to={"/register"}
                 className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-300"
               >
                 Join as a Donor
-              </button>
+              </Link>
 
               <Link
-              to={"/searchpage"}
+                to={"/searchdoner"}
                 className="bg-white hover:bg-gray-100 text-red-600 font-semibold py-3 px-6 border border-red-600 rounded-lg shadow-md transition duration-300"
               >
                 Search Donors
