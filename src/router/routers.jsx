@@ -12,6 +12,7 @@ import UserDashBorad from "../pages/Dashboard/AdminPage/UserDashBorad";
 import ProfilePage from "../pages/Dashboard/AdminPage/ProfilePage";
 import EditProfilePage from "../pages/Dashboard/AdminPage/EditProfilePage";
 import DonationRequests from "../pages/Dashboard/DonorDashboard/DonationRequests";
+import CreateDonationRequest from "../pages/Dashboard/DonorDashboard/CreateDonationRequest";
 
 const routers = createBrowserRouter([
   {
@@ -56,6 +57,7 @@ const routers = createBrowserRouter([
       { path: "profile", element: <ProfilePage /> },
       { path: "EditProfilePage", element: <EditProfilePage /> },
       { path: "my-donation-requests", element: <DonationRequests /> },
+      { path: "create-donation-request", element: <CreateDonationRequest /> },
     ],
   },
 ]);

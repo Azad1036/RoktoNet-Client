@@ -88,7 +88,7 @@ function Dashboard() {
             Donation Requests
           </Link>
           <Link
-            to="/dashboard/drives"
+            to="/dashboard/create-donation-request"
             className={`flex items-center w-full p-3 rounded-lg ${
               isActive("/drives")
                 ? "bg-red-50 text-red-600"
@@ -97,7 +97,7 @@ function Dashboard() {
             onClick={() => setMobileSidebarOpen(false)}
           >
             <FiCalendar className="mr-3" />
-            Donation Drives
+            Create Donation
           </Link>
           <Link
             to="/dashboard/recipients"
