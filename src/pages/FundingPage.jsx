@@ -1,120 +1,133 @@
-// src/pages/FundingPage.jsx
+import React from 'react';
 
 const FundingPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      {/* Header Section */}
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-red-600">ফান্ডিং হিস্টরি</h1>
-          <button className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-all">
-            <span className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-              </svg>
-              ফান্ড দিন
-            </span>
+        {/* Header with Donate Button */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-indigo-700">Funding History</h1>
+            <p className="text-gray-600 mt-1">All donations made to our organization</p>
+          </div>
+          <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-all flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+            </svg>
+            Make Donation
           </button>
         </div>
 
-        {/* Total Fund Card */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            মোট সংগ্রহ: <span className="text-red-600">৳ ১,২৫,০০০</span>
-          </h2>
-        </div>
-
-        {/* Funding Table */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-red-50">
-              <tr>
-                <th className="px-6 py-4 text-left text-red-600 font-semibold">নাম</th>
-                <th className="px-6 py-4 text-left text-red-600 font-semibold">পরিমাণ</th>
-                <th className="px-6 py-4 text-left text-red-600 font-semibold">তারিখ</th>
-              </tr>
-            </thead>
-            
-            <tbody className="divide-y divide-gray-200">
-              {/* Sample Data 1 */}
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4">আহমেদ রিয়াদ</td>
-                <td className="px-6 py-4 text-green-600 font-medium">৳ ৫,০০০</td>
-                <td className="px-6 py-4">১০ এপ্রিল ২০২৪</td>
-              </tr>
-
-              {/* Sample Data 2 */}
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4">ফারহানা তাবাসসুম</td>
-                <td className="px-6 py-4 text-green-600 font-medium">৳ ২,০০০</td>
-                <td className="px-6 py-4">৮ এপ্রিল ২০২৪</td>
-              </tr>
-
-              {/* Sample Data 3 */}
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4">জুবায়ের ইসলাম</td>
-                <td className="px-6 py-4 text-green-600 font-medium">৳ ১০,০০০</td>
-                <td className="px-6 py-4">৫ এপ্রিল ২০২৪</td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/* Pagination (Placeholder) */}
-          <div className="flex justify-center p-4 border-t">
-            <div className="flex gap-2">
-              <button className="px-4 py-2 bg-red-100 text-red-600 rounded">১</button>
-              <button className="px-4 py-2 hover:bg-red-100 rounded">২</button>
-              <button className="px-4 py-2 hover:bg-red-100 rounded">৩</button>
-            </div>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <h3 className="text-gray-500 text-sm font-medium">Total Funds</h3>
+            <p className="text-3xl font-bold text-indigo-600 mt-2">$25,500</p>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <h3 className="text-gray-500 text-sm font-medium">This Month</h3>
+            <p className="text-3xl font-bold text-indigo-600 mt-2">$5,200</p>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <h3 className="text-gray-500 text-sm font-medium">Total Donors</h3>
+            <p className="text-3xl font-bold text-indigo-600 mt-2">142</p>
           </div>
         </div>
 
-        {/* Payment Modal (Hidden by default) */}
-        <div className="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full">
-            <h3 className="text-2xl font-bold mb-6">পেমেন্ট করুন</h3>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gray-700 mb-2">কার্ড নম্বর</label>
-                <input 
-                  type="text" 
-                  className="w-full p-2 border rounded" 
-                  placeholder="1234 5678 9012 3456"
-                />
-              </div>
+        {/* Funding Table */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Donor</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                </tr>
+              </thead>
+              
+              <tbody className="divide-y divide-gray-200">
+                <tr className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                        <span className="text-indigo-600 font-medium">AR</span>
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900">Ahmed Riyad</div>
+                        <div className="text-sm text-gray-500">ahmed@example.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-green-600 font-medium">$5,000</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10 April 2024</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Completed</span>
+                  </td>
+                </tr>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-gray-700 mb-2">মেয়াদ শেষ</label>
-                  <input 
-                    type="text" 
-                    className="w-full p-2 border rounded" 
-                    placeholder="MM/YY"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-gray-700 mb-2">CVC</label>
-                  <input 
-                    type="text" 
-                    className="w-full p-2 border rounded" 
-                    placeholder="123"
-                  />
-                </div>
-              </div>
+                <tr className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                        <span className="text-indigo-600 font-medium">FT</span>
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900">Farhana Tabassum</div>
+                        <div className="text-sm text-gray-500">farhana@example.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-green-600 font-medium">$2,000</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8 April 2024</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Completed</span>
+                  </td>
+                </tr>
 
-              <div>
-                <label className="block text-gray-700 mb-2">পরিমাণ</label>
-                <input 
-                  type="number" 
-                  className="w-full p-2 border rounded" 
-                  placeholder="৳"
-                />
-              </div>
+                <tr className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                        <span className="text-indigo-600 font-medium">ZI</span>
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900">Zubayer Islam</div>
+                        <div className="text-sm text-gray-500">zubayer@example.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-green-600 font-medium">$10,000</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5 April 2024</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Completed</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-              <button className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700">
-                পেমেন্ট সম্পন্ন করুন
+          {/* Pagination */}
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              Showing <span className="font-medium">1</span> to <span className="font-medium">3</span> of <span className="font-medium">24</span> donations
+            </div>
+            <div className="flex space-x-2">
+              <button className="px-3 py-1 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                Previous
+              </button>
+              <button className="px-3 py-1 border rounded-md text-sm font-medium bg-indigo-600 text-white">
+                1
+              </button>
+              <button className="px-3 py-1 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                2
+              </button>
+              <button className="px-3 py-1 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                3
+              </button>
+              <button className="px-3 py-1 border rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                Next
               </button>
             </div>
           </div>

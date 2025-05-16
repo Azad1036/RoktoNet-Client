@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Loading from "../components/Loading";
 import useAxiosPublic from "../hooks/useAxiosPublic";
@@ -37,6 +37,7 @@ const SearchPage = () => {
   watch("district");
 
   const handleRegisterSubmit = async (fromData) => {
+    
     const quary = {};
     // Find Quary
     if (fromData.bloodGroup) quary.bloodGroup = fromData.bloodGroup;

@@ -27,7 +27,7 @@ const Register = () => {
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   // User Create Auth
-  const { createNewUser, setUser, intro } = useAuth();
+  const { createNewUser, setUser } = useAuth();
 
   //Data fetch By upzila
   const { data, isLoading } = useQuery({
@@ -77,7 +77,7 @@ const Register = () => {
         // Firebase Error
         .catch((err) => {
           {
-            err?.message && toast.error("Register failed try again");
+            err && toast.error("Register failed try again");
           }
         });
     }
@@ -106,7 +106,7 @@ const Register = () => {
       <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-xl w-full max-w-3xl border border-gray-50 transition-all hover:shadow-2xl">
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-indigo-900 mb-2 tracking-tight">
-            Complete Registration {intro}
+            Complete Registration
           </h1>
           <p className="text-gray-500 text-sm sm:text-base">
             Fill in your details to get started
