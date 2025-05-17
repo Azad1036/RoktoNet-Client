@@ -1,64 +1,80 @@
-import React, { useState, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { useRef } from "react";
 import JoditEditor from "jodit-react";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import useAxiosSecure from "./../../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const AddBlogPage = () => {
-  const [title, setTitle] = useState("");
-  const [thumbnail, setThumbnail] = useState(null);
-  const [content, setContent]   = useState("");        // শুধু শেষ পর্যন্ত রাখা
-  const [errors, setErrors]     = useState({ title: "", content: "" });
+const imageHostingAPi = import.meta.env.VITE_Image_Hosting_API;
+const imageHostingKey = `https://api.imgbb.com/1/upload?key=${imageHostingAPi}`;
 
-  const editor = useRef(null);   // Jodit reference
+export default function AddBlogPage() {
+  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const err = { title: "", content: "" };
-    if (!title.trim())   err.title   = "Title is required";
-    if (!content.trim()) err.content = "Content is required";
-    setErrors(err);
-    if (err.title || err.content) return;
+  const editorRef = useRef(null);
 
-    console.log({ title, thumbnail, content });
-    alert("Blog created!");
-    setTitle(""); setThumbnail(null); setContent("");
-    document.getElementById("blog-thumbnail").value = null;
-    editor.current?.setEditorValue("");               // এডিটর ক্লিয়ার
-  };
+  const onSubmit = async (data) => {
+    // image upload to imgbb and then get an url
+    const imageFile = { image: data.image[0] };
+    const res = await axiosPublic.post(imageHostingKey, imageFile, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    const addBlogPost = {
+      ...data,
+      status: "draft",
+      image: res.data.data.display_url,
+    };
 
-  const handleCancel = () => {
-    setTitle(""); setThumbnail(null); setContent("");
-    setErrors({ title: "", content: "" });
-    document.getElementById("blog-thumbnail").value = null;
-    editor.current?.setEditorValue("");
+    const response = await axiosSecure.post("/blog-post", addBlogPost);
+    if (response?.data?.insertedId) {
+      navigate(-1);
+      reset();
+    }
+    toast.success("Blog Post Successful");
+
+    editorRef.current?.setEditorValue("");
   };
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h1 className="text-3xl font-bold mb-8">Add New Blog</h1>
 
-      <form className="space-y-6" onSubmit={handleSubmit}>
-        {/* Title */}
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label className="block text-sm font-medium mb-1">Title</label>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter blog title"
+            {...register("title", { required: "Title is required" })}
             className={`w-full px-4 py-2 border rounded ${
               errors.title ? "border-red-500" : "border-gray-300"
             }`}
-            placeholder="Enter blog title"
           />
-          {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
+          {errors.title && (
+            <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+          )}
         </div>
 
-        {/* Thumbnail */}
         <div>
-          <label className="block text-sm font-medium mb-1">Thumbnail Image</label>
+          <label className="block text-sm font-medium mb-1">
+            Thumbnail Image
+          </label>
           <input
-            id="blog-thumbnail"
             type="file"
             accept="image/*"
-            onChange={(e) => setThumbnail(e.target.files[0])}
+            {...register("image")}
             className="block w-full text-sm text-gray-500
                        file:mr-4 file:py-2 file:px-4 file:rounded-md
                        file:border-0 file:bg-blue-50 file:text-blue-700
@@ -66,29 +82,33 @@ const AddBlogPage = () => {
           />
         </div>
 
-        {/* Content */}
         <div>
           <label className="block text-sm font-medium mb-1">Content</label>
-          <div className={`border rounded ${errors.content ? "border-red-500" : "border-gray-300"}`}>
+          <div
+            className={`border rounded ${
+              errors.content ? "border-red-500" : "border-gray-300"
+            }`}
+          >
             <JoditEditor
-              ref={editor}
-              defaultValue={content}          // value নয়
-              config={{
-                height: 400,
-                toolbarAdaptive: false,
-                buttons: ["bold","italic","underline","|","ul","ol","|","image","link","|","undo","redo"],
-              }}
-              onBlur={(newContent) => setContent(newContent)}  // শুধু ব্লারে স্টেট
+              ref={editorRef}
+              config={{ height: 400 }}
+              onBlur={(newContent) => setValue("content", newContent)}
             />
           </div>
-          {errors.content && <p className="text-red-500 text-sm">{errors.content}</p>}
+          {errors.content && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.content.message}
+            </p>
+          )}
         </div>
 
-        {/* Actions */}
         <div className="flex justify-end gap-4 pt-4">
           <button
             type="button"
-            onClick={handleCancel}
+            onClick={() => {
+              reset();
+              editorRef.current?.setEditorValue("");
+            }}
             className="px-6 py-2 border rounded hover:bg-gray-50"
           >
             Cancel
@@ -103,6 +123,4 @@ const AddBlogPage = () => {
       </form>
     </div>
   );
-};
-
-export default AddBlogPage;
+}
