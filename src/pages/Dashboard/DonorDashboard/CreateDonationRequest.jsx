@@ -177,9 +177,7 @@ const CreateDonationRequest = () => {
                   </label>
                   <div className="relative">
                     <select
-                      {...register("district", {
-                        required: "This is required",
-                      })}
+                      {...register("district")}
                       onChange={handleDistrictChange}
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 appearance-none transition-all duration-200"
                     >
@@ -261,9 +259,7 @@ const CreateDonationRequest = () => {
                   </label>
                   <div className="relative">
                     <select
-                      {...register("upazila", {
-                        required: "This is required",
-                      })}
+                      {...register("upazila")}
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 appearance-none transition-all duration-200"
                     >
                       <option value="">Select Upazila</option>

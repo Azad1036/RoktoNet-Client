@@ -23,6 +23,7 @@ import VolunteerContentManagement from "../pages/Dashboard/VolunteerDashboard/Vo
 import ProfilePage from "./../pages/Dashboard/DonorDashboard/ProfilePage";
 import PrivateRouters from "./PrivateRouters";
 import EditDonationsRequest from "../pages/Dashboard/DonorDashboard/EditDonationsRequest";
+import ViewDetilesPage from "../pages/Dashboard/DonorDashboard/ViewDetilesPage";
 
 const routers = createBrowserRouter([
   {
@@ -79,8 +80,12 @@ const routers = createBrowserRouter([
       { path: "profile", element: <ProfilePage /> },
       { path: "EditProfilePage", element: <EditProfilePage /> },
       { path: "my-donation-requests", element: <DonationRequests /> },
-      { path: "edit-donations-request/:reqId", element: <EditDonationsRequest /> },
+      {
+        path: "edit-donations-request/:reqId",
+        element: <EditDonationsRequest />,
+      },
       { path: "create-donation-request", element: <CreateDonationRequest /> },
+      { path: "view-detiles-page/:reqId", element: <ViewDetilesPage /> },
 
       // Admin Page
       // Admin DashBoard

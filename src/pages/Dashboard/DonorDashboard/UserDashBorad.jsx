@@ -1,12 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../../components/Loading";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const UserDashboard = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   // User Data
   const { data: isUserName, isLoading: isDataLoadin } = useQuery({
@@ -43,11 +45,41 @@ const UserDashboard = () => {
     }
   };
 
-  const sortedDates = data.sort(
-    (a, b) => new Date(b.donationDate) - new Date(a.donationDate)
-  );
+  const donationRequests = (data || [])
+    .sort((a, b) => new Date(b.donationDate) - new Date(a.donationDate))
+    .slice(0, 3);
 
-  const donationRequests = sortedDates.slice(0, 3);
+  const handlePostDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await axiosSecure.delete(`/delete-donation-request/${id}`);
+
+        if (res.data?.acknowledged) {
+          // Update query cache after deletion
+          queryClient.setQueryData(
+            ["donationRequests", user?.email],
+            (oldData) => {
+              return oldData?.filter((item) => item._id !== id);
+            }
+          );
+
+          Swal.fire(
+            "Deleted!",
+            "Your donation request has been deleted.",
+            "success"
+          );
+        }
+      }
+    });
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -138,12 +170,18 @@ const UserDashboard = () => {
                       >
                         Edit
                       </Link>
-                      <button className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600">
+                      <button
+                        onClick={() => handlePostDelete(request._id)}
+                        className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
+                      >
                         Delete
                       </button>
-                      <button className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-green-600">
+                      <Link
+                        to={`/dashboard/view-detiles-page/${request._id}`}
+                        className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-green-600"
+                      >
                         View
-                      </button>
+                      </Link>
                     </td>
                   </tr>
                 ))}

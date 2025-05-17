@@ -9,7 +9,7 @@ import { RxAvatar } from "react-icons/rx";
 
 const ProfilePage = () => {
   const { user } = useAuth();
-  
+
   const axiosSecure = useAxiosSecure();
 
   const { data, isLoading } = useQuery({
@@ -19,8 +19,6 @@ const ProfilePage = () => {
       return res.data;
     },
   });
-
-  console.log(data);
 
   if (isLoading) {
     return <Loading />;
