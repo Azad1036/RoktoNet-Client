@@ -15,6 +15,7 @@ import Loading from "../../../components/Loading";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const CreateDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
@@ -56,6 +57,8 @@ const CreateDonationRequest = () => {
       `/create-donation-request`,
       donationRequest
     );
+
+    console.log(createDontion);
 
     if (createDontion.data.insertedId) {
       toast.success("Your Donation Request Submit Successfull");
@@ -126,7 +129,9 @@ const CreateDonationRequest = () => {
                   <div className="relative">
                     <input
                       type="text"
-                      {...register("recipientName")}
+                      {...register("recipientName", {
+                        required: "This is required",
+                      })}
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200"
                       placeholder="Enter recipient name"
                     />
@@ -142,7 +147,9 @@ const CreateDonationRequest = () => {
                   </label>
                   <div className="relative">
                     <select
-                      {...register("bloodGroup")}
+                      {...register("bloodGroup", {
+                        required: "This is required",
+                      })}
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 appearance-none transition-all duration-200"
                     >
                       <option value="">Select Blood Group</option>
@@ -170,7 +177,9 @@ const CreateDonationRequest = () => {
                   </label>
                   <div className="relative">
                     <select
-                      {...register("district")}
+                      {...register("district", {
+                        required: "This is required",
+                      })}
                       onChange={handleDistrictChange}
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 appearance-none transition-all duration-200"
                     >
@@ -252,7 +261,9 @@ const CreateDonationRequest = () => {
                   </label>
                   <div className="relative">
                     <select
-                      {...register("upazila")}
+                      {...register("upazila", {
+                        required: "This is required",
+                      })}
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 appearance-none transition-all duration-200"
                     >
                       <option value="">Select Upazila</option>
@@ -277,7 +288,9 @@ const CreateDonationRequest = () => {
                   </label>
                   <div className="relative">
                     <input
-                      {...register("hospitalName")}
+                      {...register("hospitalName", {
+                        required: "This is required",
+                      })}
                       type="text"
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200"
                       placeholder="Enter hospital name"
@@ -294,7 +307,9 @@ const CreateDonationRequest = () => {
                   </label>
                   <div className="relative">
                     <input
-                      {...register("fullAddress")}
+                      {...register("fullAddress", {
+                        required: "This is required",
+                      })}
                       type="text"
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200"
                       placeholder="Enter full address"
@@ -314,7 +329,9 @@ const CreateDonationRequest = () => {
                   </label>
                   <div className="relative">
                     <input
-                      {...register("donationDate")}
+                      {...register("donationDate", {
+                        required: "This is required",
+                      })}
                       type="date"
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200"
                     />
@@ -330,7 +347,9 @@ const CreateDonationRequest = () => {
                   </label>
                   <div className="relative">
                     <input
-                      {...register("donationTime")}
+                      {...register("donationTime", {
+                        required: "This is required",
+                      })}
                       type="time"
                       className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200"
                     />

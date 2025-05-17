@@ -20,6 +20,7 @@ import AddBlogPage from "../pages/Dashboard/AdminPage/AddBlogPage";
 import VolunteerDashBoard from "../pages/Dashboard/VolunteerDashboard/VolunteerDashBoard";
 import AllDontaionsReq from "../pages/Dashboard/VolunteerDashboard/AllDontaionsReq";
 import VolunteerContentManagement from "../pages/Dashboard/VolunteerDashboard/VolunteerContentManagement";
+import ProfilePage from "./../pages/Dashboard/DonorDashboard/ProfilePage";
 
 const routers = createBrowserRouter([
   {
@@ -61,7 +62,7 @@ const routers = createBrowserRouter([
     element: <Dashboard />,
     children: [
       { path: "donor", element: <UserDashboard /> },
-      { path: "profile", element: <EditProfilePage /> },
+      { path: "profile", element: <ProfilePage /> },
       { path: "EditProfilePage", element: <EditProfilePage /> },
       { path: "my-donation-requests", element: <DonationRequests /> },
       { path: "create-donation-request", element: <CreateDonationRequest /> },

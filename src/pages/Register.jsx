@@ -21,13 +21,14 @@ const Register = () => {
     reset,
     formState: { errors },
   } = useForm();
+
   // Store district
   const [selectDistrict, setSelectDistrict] = useState("");
 
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   // User Create Auth
-  const { createNewUser, setUser } = useAuth();
+  const { createNewUser, setUser, updateUserPrfile } = useAuth();
 
   //Data fetch By upzila
   const { data, isLoading } = useQuery({
@@ -60,14 +61,21 @@ const Register = () => {
         status: "active",
         image: res.data.data.display_url,
       };
+
       // // User Register By Firebase
       createNewUser(fromData.email, fromData.password)
         .then(async (result) => {
           const user = result.user;
           setUser(user);
+
+          if (fromData.name) {
+            updateUserPrfile({
+              displayName: fromData.name,
+            });
+          }
+
           // User Register By DB
           const data = await axiosPublic.post("/users", userRegister);
-          console.log(data);
           if (data?.data?.insertedId) {
             navigate("/");
             reset();
@@ -77,7 +85,7 @@ const Register = () => {
         // Firebase Error
         .catch((err) => {
           {
-            err && toast.error("Register failed try again");
+            err && toast.error("Your Email Already Use");
           }
         });
     }
@@ -418,10 +426,7 @@ const Register = () => {
 
           {/* Submit Button */}
           <div className="mt-6 sm:mt-8">
-            <button
-              type="submit"
-              className="w-full px-4 py-2 text-white font-semibold rounded-xl shadow-md bg-indigo-600 hover:bg-indigo-700 transition-all duration-300"
-            >
+            <button type="submit" className="w-full  btn btn-primary">
               Register
             </button>
           </div>

@@ -4,9 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Loading from "../../../components/Loading";
 import { Link } from "react-router-dom";
+import { MdAvTimer } from "react-icons/md";
+import { RxAvatar } from "react-icons/rx";
 
 const ProfilePage = () => {
   const { user } = useAuth();
+  
   const axiosSecure = useAxiosSecure();
 
   const { data, isLoading } = useQuery({
@@ -16,6 +19,8 @@ const ProfilePage = () => {
       return res.data;
     },
   });
+
+  console.log(data);
 
   if (isLoading) {
     return <Loading />;
@@ -61,15 +66,19 @@ const ProfilePage = () => {
               <div className="sm:col-span-6 flex items-center">
                 <div className="flex-shrink-0 h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center">
                   <div>
-                    <img
-                      className="h-16 w-16 rounded-full"
-                      src={image}
-                      alt=""
-                    />
+                    {image ? (
+                      <img
+                        className="h-16 w-16 rounded-full"
+                        src={image}
+                        alt=""
+                      />
+                    ) : (
+                      <RxAvatar />
+                    )}
                   </div>
                 </div>
                 <span className="ml-4 text-sm text-gray-500">
-                  Click on edit to change photo
+                  Click on edit profile to change photo
                 </span>
               </div>
 

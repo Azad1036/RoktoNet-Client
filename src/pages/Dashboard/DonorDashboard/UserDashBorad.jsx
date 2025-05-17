@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 import Loading from "../../../components/Loading";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
@@ -8,6 +7,15 @@ import { Link } from "react-router-dom";
 const UserDashboard = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+
+  // User Data
+  const { data: isUserName, isLoading: isDataLoadin } = useQuery({
+    queryKey: ["userProfile", user],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/userProfile/${user.email}`);
+      return res.data;
+    },
+  });
 
   const { data, isLoading } = useQuery({
     queryKey: ["donationRequests", user?.email],
@@ -18,6 +26,7 @@ const UserDashboard = () => {
   });
 
   if (isLoading) return <Loading />;
+  if (isDataLoadin) return <Loading />;
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
@@ -45,7 +54,7 @@ const UserDashboard = () => {
       {/* Welcome Section */}
       <section className="bg-white p-6 rounded-lg shadow-sm mb-8">
         <h1 className="text-2xl font-bold text-red-700 mb-2">
-          Welcome, {user.name}!
+          Welcome, {isUserName.name}!
         </h1>
         <p className="text-gray-600">
           Thank you for being a blood donor and helping save lives.
