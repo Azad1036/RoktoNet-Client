@@ -17,6 +17,9 @@ import AllUsers from "../pages/Dashboard/AdminPage/AllUsers";
 import AllDonationsRequests from "../pages/Dashboard/AdminPage/AllDonationsRequests";
 import ContentManagement from "../pages/Dashboard/AdminPage/ContentManagement";
 import AddBlogPage from "../pages/Dashboard/AdminPage/AddBlogPage";
+import VolunteerDashBoard from "../pages/Dashboard/VolunteerDashboard/VolunteerDashBoard";
+import AllDontaionsReq from "../pages/Dashboard/VolunteerDashboard/AllDontaionsReq";
+import VolunteerContentManagement from "../pages/Dashboard/VolunteerDashboard/VolunteerContentManagement";
 
 const routers = createBrowserRouter([
   {
@@ -64,6 +67,7 @@ const routers = createBrowserRouter([
       { path: "create-donation-request", element: <CreateDonationRequest /> },
 
       // Admin Page
+      // Admin DashBoard
       {
         path: "admin",
         element: <AdminDashboard />,
@@ -91,6 +95,25 @@ const routers = createBrowserRouter([
       {
         path: "content-management/add-blog",
         element: <AddBlogPage />,
+      },
+
+      // Volunteer Page
+      // Volunteer DashBoard
+      {
+        path: "volunteer",
+        element: <VolunteerDashBoard />,
+      },
+
+      // Volunteer All Donation Request Page
+      {
+        path: "all-donation-requests",
+        element: <AllDontaionsReq />,
+      },
+
+      // Volunteer ContentManagement Page
+      {
+        path: "content-management",
+        element: <VolunteerContentManagement />,
       },
     ],
   },

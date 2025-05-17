@@ -37,13 +37,16 @@ function Dashboard() {
       return <Navigate to="/dashboard/admin" />;
     } else if (data.role === "donor") {
       return <Navigate to="/dashboard/donor" />;
+    } else if (data.res === "volunteer") {
+      return <Navigate to="/dashboard/volunteer" />;
     } else {
-      return <Navigate to="/dashboard/user-home" />;
+      return <Navigate to={"/"} />;
     }
   }
 
   const allDashboardLinks = (
     <>
+      {/* Admin DashBoard */}
       {data?.role === "admin" && (
         <>
           <Link
@@ -77,6 +80,7 @@ function Dashboard() {
         </>
       )}
 
+      {/* Doner DashBoard */}
       {data?.role === "donor" && (
         <>
           <Link
@@ -103,8 +107,33 @@ function Dashboard() {
         </>
       )}
 
-      {/* You can add other roles here similarly */}
+      {/* Volunteer Dashboard */}
+      {data?.role === "volunteer" && (
+        <>
+          <Link
+            to="/dashboard/volunteer"
+            className="flex items-center w-full p-3 rounded-lg hover:bg-gray-100"
+          >
+            <FiHome className="mr-3" />
+            Dashboard
+          </Link>
 
+          <Link
+            to="/dashboard/all-donation-requests"
+            className="flex items-center w-full p-3 rounded-lg hover:bg-gray-100"
+          >
+            <FiDroplet className="mr-3" />
+            All Donation Requests
+          </Link>
+          <Link
+            to="/dashboard/content-management"
+            className="flex items-center w-full p-3 rounded-lg hover:bg-gray-100"
+          >
+            <FiDroplet className="mr-3" />
+            Content Management
+          </Link>
+        </>
+      )}
       <Link
         to="/"
         className="flex items-center w-full p-3 rounded-lg hover:bg-gray-100"
