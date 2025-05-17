@@ -11,7 +11,7 @@ import useAuth from "../../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/Loading";
 
-const DonationRequests = () => {
+const AllDonationsRequests = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
@@ -30,7 +30,7 @@ const DonationRequests = () => {
       {/* Header with gradient */}
       <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-xl p-6 mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
-          My Donation Requests
+          All Donation Requests
         </h1>
         <p className="text-gray-600">
           Track all your blood donation requests and their status
@@ -208,4 +208,4 @@ const DonationRequests = () => {
   );
 };
 
-export default DonationRequests;
+export default AllDonationsRequests;

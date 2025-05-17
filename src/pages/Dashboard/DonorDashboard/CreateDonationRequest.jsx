@@ -49,7 +49,7 @@ const CreateDonationRequest = () => {
       ...data,
       email,
       name,
-      status: "Pending",
+      status: "pending",
     };
 
     const createDontion = await axiosSecure.post(
