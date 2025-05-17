@@ -96,7 +96,7 @@ const UserDashboard = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {donationRequests.map((request) => (
-                  <tr key={request.id}>
+                  <tr key={request._id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {request.recipientName}
                     </td>
@@ -132,9 +132,12 @@ const UserDashboard = () => {
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                      <button className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-green-600">
+                      <Link
+                        to={`/dashboard/edit-donations-request/${request._id}`}
+                        className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-green-600"
+                      >
                         Edit
-                      </button>
+                      </Link>
                       <button className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600">
                         Delete
                       </button>

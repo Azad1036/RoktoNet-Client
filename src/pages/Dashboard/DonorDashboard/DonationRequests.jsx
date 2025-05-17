@@ -10,11 +10,13 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/Loading";
+import { useEffect, useState } from "react";
 
 const DonationRequests = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
+  // My Create Donation Request Data
   const { data: donationRequests, isLoading } = useQuery({
     queryKey: ["donationRequests", user?.email],
     queryFn: async () => {
@@ -22,6 +24,20 @@ const DonationRequests = () => {
       return res.data;
     },
   });
+  const [filterRequest, setFilterRequest] = useState(donationRequests || []);
+
+  const handleFilterReqest = (e) => {
+    const value = e.target.value;
+    if (value === "all") {
+      setFilterRequest(donationRequests);
+    } else {
+      setFilterRequest(donationRequests.filter((req) => req.status === value));
+    }
+  };
+
+  useEffect(() => {
+    if (donationRequests) setFilterRequest(donationRequests);
+  }, [donationRequests]);
 
   if (isLoading) return <Loading />;
 
@@ -54,7 +70,10 @@ const DonationRequests = () => {
           <div className="relative">
             <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-2 shadow-sm">
               <FiFilter className="text-gray-500" />
-              <select className="appearance-none bg-transparent pr-8 focus:outline-none">
+              <select
+                onChange={handleFilterReqest}
+                className="appearance-none bg-transparent pr-8 focus:outline-none"
+              >
                 <option value="all">All Status</option>
                 <option value="pending">Pending</option>
                 <option value="inprogress">In Progress</option>
@@ -93,7 +112,7 @@ const DonationRequests = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {donationRequests.map((request) => (
+              {filterRequest.map((request) => (
                 <tr
                   key={request._id}
                   className="hover:bg-gray-50 transition-colors"
