@@ -55,7 +55,7 @@ const BloodDonationRequests = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filterByReq.map((request) => (
             <div
-              key={request.id}
+              key={request._id}
               className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-100"
             >
               <div className="p-6">
@@ -114,7 +114,7 @@ const BloodDonationRequests = () => {
                 </div>
 
                 <Link
-                  to={`/donation-requests/${request.id}`}
+                  to={`/donation-request-details/${request._id}`}
                   className="mt-6 inline-flex items-center justify-center w-full px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                 >
                   View Full Details

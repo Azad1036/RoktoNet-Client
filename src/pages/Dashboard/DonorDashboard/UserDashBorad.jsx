@@ -81,6 +81,14 @@ const UserDashboard = () => {
     });
   };
 
+  const handleChangeStatus = async (userId, currentStatus) => {
+    const data = await axiosSecure.patch(`/status-update-donor/${userId}`, {
+      status: currentStatus,
+    });
+    console.log(data);
+    queryClient.invalidateQueries(["donationRequests"]);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Welcome Section */}
@@ -154,10 +162,20 @@ const UserDashboard = () => {
                       </span>
                       {request.status === "inprogress" && (
                         <div className="mt-2 space-x-2">
-                          <button className="px-2 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600">
+                          <button
+                            onClick={() =>
+                              handleChangeStatus(request._id, "done")
+                            }
+                            className="px-2 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600"
+                          >
                             Mark as Done
                           </button>
-                          <button className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600">
+                          <button
+                            onClick={() =>
+                              handleChangeStatus(request._id, "canceled")
+                            }
+                            className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
+                          >
                             Cancel
                           </button>
                         </div>

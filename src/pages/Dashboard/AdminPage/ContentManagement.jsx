@@ -116,8 +116,7 @@ const ContentManagement = () => {
         {/* Blog List */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {allBlog.map((blog) => (
-            <Link
-              to={`/dashboard/blog-details/${blog._id}`}
+            <div
               key={blog._id}
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow"
             >
@@ -169,10 +168,10 @@ const ContentManagement = () => {
                   </button>
 
                   <Link
-                    onClick={() => toast.success("This time Not Exit ")}
+                    to={`/dashboard/blog-details/${blog._id}`}
                     className="flex items-center px-3 py-1.5 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
                   >
-                    <FiEdit3 className="mr-1.5" /> Edit
+                   View
                   </Link>
 
                   <button
@@ -183,7 +182,7 @@ const ContentManagement = () => {
                   </button>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 

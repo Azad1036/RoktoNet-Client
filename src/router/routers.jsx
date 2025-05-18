@@ -25,7 +25,10 @@ import PrivateRouters from "./PrivateRouters";
 import EditDonationsRequest from "../pages/Dashboard/DonorDashboard/EditDonationsRequest";
 import ViewDetilesPage from "../pages/Dashboard/DonorDashboard/ViewDetilesPage";
 import EditBlogPosts from "../pages/EditBlogPost";
-
+import DonationRequestDetails from "../pages/DonationRequestDetails";
+import Blog from "../pages/Blog";
+import BlogDetilesAllUsers from "../pages/BlogDetilesAllUsers";
+import AddFundingPage from "../pages/AddFundingPage";
 
 const routers = createBrowserRouter([
   {
@@ -53,12 +56,32 @@ const routers = createBrowserRouter([
         element: <BloodDonationRequests />,
       },
       {
+        path: "donation-request-details/:id",
+        element: (
+          <PrivateRouters>
+            <DonationRequestDetails />
+          </PrivateRouters>
+        ),
+      },
+      {
         path: "blogDetailsPage",
         element: <BlogDetailsPage />,
       },
       {
         path: "fundingPage",
         element: <FundingPage />,
+      },
+      {
+        path: "blog",
+        element: <Blog />,
+      },
+      {
+        path: "blog/blog-detiles/:id",
+        element: <BlogDetilesAllUsers />,
+      },
+      {
+        path: "fundingPage/add-found",
+        element: <AddFundingPage />,
       },
     ],
   },

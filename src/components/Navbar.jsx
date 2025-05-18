@@ -33,7 +33,7 @@ const Navbar = () => {
                   <FaHeart className="mr-1" /> Donation Requests
                 </Link>
                 <Link
-                  to={"/blogDetailsPage"}
+                  to={"/blog"}
                   className="px-3 py-2 rounded-md text-sm font-medium hover:bg-red-800 flex items-center"
                 >
                   <FaBlog className="mr-1" /> Blog
