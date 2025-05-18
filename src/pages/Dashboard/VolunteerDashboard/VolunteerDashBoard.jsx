@@ -32,6 +32,16 @@ const VolunteerDashBoard = () => {
     },
   });
 
+  const { data: donationList = [], isLoading: donation } = useQuery({
+    queryKey: ["allDonationUser"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/all-donation-user");
+      return res.data; // ⬅️ array expected
+    },
+  });
+
+  if (isLoading) return <Loading />;
+
   if (isLoading) {
     return <Loading />;
   }
@@ -41,6 +51,9 @@ const VolunteerDashBoard = () => {
   }
 
   if (donetionLoading) {
+    return <Loading />;
+  }
+  if (donation) {
     return <Loading />;
   }
 
@@ -75,7 +88,13 @@ const VolunteerDashBoard = () => {
             <FaHandHoldingUsd className="text-3xl" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-gray-800">$24,750</h2>
+            <h2 className="text-3xl font-bold text-gray-800">
+              {donationList.reduce(
+                (total, donation) =>
+                  total + parseFloat(donation.totalAmount || 0),
+                0
+              )}
+            </h2>
             <p className="text-gray-600">Total Funding</p>
           </div>
         </div>

@@ -54,7 +54,7 @@ const Blog = () => {
 
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-800 mb-3 line-clamp-2">
-                  {blog.title}
+                  {blog.title.length > 25 ? blog.title.slice(0,25) + "..." : blog.title}
                 </h3>
                 <div className="flex items-center text-gray-500 text-sm">
                   <FiEye className="mr-1" />

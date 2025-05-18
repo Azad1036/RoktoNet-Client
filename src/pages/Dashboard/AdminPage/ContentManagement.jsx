@@ -6,10 +6,12 @@ import { FiEdit3, FiTrash2, FiEye, FiEyeOff } from "react-icons/fi";
 
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import useAuth from "../../../hooks/useAuth";
 
 const ContentManagement = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: allBlog, isLoading } = useQuery({
     queryKey: ["blogView"],
@@ -19,11 +21,24 @@ const ContentManagement = () => {
     },
   });
 
+  const { data: userRole, isLoading: newloading } = useQuery({
+    queryKey: ["userProfile", user],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/userProfile/${user.email}`);
+      return res.data;
+    },
+  });
+
+  if (newloading) {
+    return <Loading />;
+  }
+
   if (isLoading) {
     return <Loading />;
   }
 
   const handleBlogStatus = async (blogId, blogStatus) => {
+    console.log(blogId, blogStatus);
     await axiosSecure.patch(`/update-blog-status/${blogId}`, {
       status: blogStatus,
     });
@@ -116,7 +131,7 @@ const ContentManagement = () => {
         {/* Blog List */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {allBlog.map((blog) => (
-            <div
+            <Link
               key={blog._id}
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow"
             >
@@ -139,50 +154,54 @@ const ContentManagement = () => {
 
               <div className="p-5">
                 <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
-                  {blog.title}
+                  {blog.title.length > 25 ? blog.title.slice(0,25) + "..." : blog.title}
                 </h3>
 
                 <div className="flex flex-wrap gap-2 mt-4">
-                  <button
-                    onClick={() =>
-                      handleBlogStatus(
-                        blog._id,
-                        blog.status === "draft" ? "publish" : "draft"
-                      )
-                    }
-                    className={`flex items-center px-3 py-1.5 text-sm rounded-md ${
-                      blog.status === "draft"
-                        ? "bg-green-100 text-green-700 hover:bg-green-200"
-                        : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
-                    }`}
-                  >
-                    {blog.status === "draft" ? (
-                      <>
-                        <FiEye className="mr-1.5" /> Publish
-                      </>
-                    ) : (
-                      <>
-                        <FiEyeOff className="mr-1.5" /> Unpublish
-                      </>
-                    )}
-                  </button>
+                  {userRole.role === "admin" && (
+                    <>
+                      <button
+                        onClick={() =>
+                          handleBlogStatus(
+                            blog._id,
+                            blog.status === "draft" ? "publish" : "draft"
+                          )
+                        }
+                        className={`flex items-center px-3 py-1.5 text-sm rounded-md ${
+                          blog.status === "draft"
+                            ? "bg-green-100 text-green-700 hover:bg-green-200"
+                            : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
+                        }`}
+                      >
+                        {blog.status === "draft" ? (
+                          <>
+                            <FiEye className="mr-1.5" /> Publish
+                          </>
+                        ) : (
+                          <>
+                            <FiEyeOff className="mr-1.5" /> Unpublish
+                          </>
+                        )}
+                      </button>
 
-                  <Link
-                    to={`/dashboard/blog-details/${blog._id}`}
-                    className="flex items-center px-3 py-1.5 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
-                  >
-                   View
-                  </Link>
+                      <Link
+                        to={`/dashboard/blog-details/${blog._id}`}
+                        className="flex items-center px-3 py-1.5 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
+                      >
+                        View
+                      </Link>
 
-                  <button
-                    onClick={() => handleBlogDelete(blog._id)}
-                    className="flex items-center px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded-md hover:bg-red-200"
-                  >
-                    <FiTrash2 className="mr-1.5" /> Delete
-                  </button>
+                      <button
+                        onClick={() => handleBlogDelete(blog._id)}
+                        className="flex items-center px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded-md hover:bg-red-200"
+                      >
+                        <FiTrash2 className="mr-1.5" /> Delete
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
