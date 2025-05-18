@@ -24,19 +24,19 @@ const AllDonationsRequests = () => {
   });
 
   const [filterRequest, setFilterRequest] = useState(donationRequests || []);
-  
-    const handleFilterReqest = (e) => {
-      const value = e.target.value;
-      if (value === "all") {
-        setFilterRequest(donationRequests);
-      } else {
-        setFilterRequest(donationRequests.filter((req) => req.status === value));
-      }
-    };
-  
-    useEffect(() => {
-      if (donationRequests) setFilterRequest(donationRequests);
-    }, [donationRequests]);
+
+  const handleFilterReqest = (e) => {
+    const value = e.target.value;
+    if (value === "all") {
+      setFilterRequest(donationRequests);
+    } else {
+      setFilterRequest(donationRequests.filter((req) => req.status === value));
+    }
+  };
+
+  useEffect(() => {
+    if (donationRequests) setFilterRequest(donationRequests);
+  }, [donationRequests]);
 
   if (isLoading) return <Loading />;
 
@@ -69,7 +69,10 @@ const AllDonationsRequests = () => {
           <div className="relative">
             <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-2 shadow-sm">
               <FiFilter className="text-gray-500" />
-              <select onChange={handleFilterReqest} className="appearance-none bg-transparent pr-8 focus:outline-none">
+              <select
+                onChange={handleFilterReqest}
+                className="appearance-none bg-transparent pr-8 focus:outline-none"
+              >
                 <option value="all">All Status</option>
                 <option value="pending">Pending</option>
                 <option value="inprogress">In Progress</option>

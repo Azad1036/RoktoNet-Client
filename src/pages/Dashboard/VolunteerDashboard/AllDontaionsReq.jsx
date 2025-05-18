@@ -7,21 +7,36 @@ import {
   FiSearch,
 } from "react-icons/fi";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import useAuth from "../../../hooks/useAuth";
+
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/Loading";
+import { useEffect, useState } from "react";
 
 const AllDontaionsReq = () => {
   const axiosSecure = useAxiosSecure();
-  const { user } = useAuth();
 
   const { data: donationRequests, isLoading } = useQuery({
-    queryKey: ["donationRequests", user?.email],
+    queryKey: ["donationRequests"],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/my-donation-requests/${user.email}`);
+      const res = await axiosSecure.get(`/all-donation-request`);
       return res.data;
     },
   });
+
+  const [filterRequest, setFilterRequest] = useState(donationRequests || []);
+
+  const handleFilterReqest = (e) => {
+    const value = e.target.value;
+    if (value === "all") {
+      setFilterRequest(donationRequests);
+    } else {
+      setFilterRequest(donationRequests.filter((req) => req.status === value));
+    }
+  };
+
+  useEffect(() => {
+    if (donationRequests) setFilterRequest(donationRequests);
+  }, [donationRequests]);
 
   if (isLoading) return <Loading />;
 
@@ -54,7 +69,10 @@ const AllDontaionsReq = () => {
           <div className="relative">
             <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-2 shadow-sm">
               <FiFilter className="text-gray-500" />
-              <select className="appearance-none bg-transparent pr-8 focus:outline-none">
+              <select
+                onChange={handleFilterReqest}
+                className="appearance-none bg-transparent pr-8 focus:outline-none"
+              >
                 <option value="all">All Status</option>
                 <option value="pending">Pending</option>
                 <option value="inprogress">In Progress</option>
@@ -93,7 +111,7 @@ const AllDontaionsReq = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {donationRequests.map((request) => (
+              {filterRequest.map((request) => (
                 <tr
                   key={request._id}
                   className="hover:bg-gray-50 transition-colors"
@@ -173,35 +191,6 @@ const AllDontaionsReq = () => {
               ))}
             </tbody>
           </table>
-        </div>
-
-        {/* Pagination */}
-        <div className="bg-white px-6 py-4 flex items-center justify-between border-t border-gray-200">
-          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm text-gray-700">
-                Showing <span className="font-medium">1</span> to{" "}
-                <span className="font-medium">4</span> of{" "}
-                <span className="font-medium">4</span> requests
-              </p>
-            </div>
-            <div>
-              <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                  Previous
-                </button>
-                <button className="z-10 bg-red-50 border-red-500 text-red-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                  1
-                </button>
-                <button className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                  2
-                </button>
-                <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                  Next
-                </button>
-              </nav>
-            </div>
-          </div>
         </div>
       </div>
     </div>

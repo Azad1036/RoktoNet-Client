@@ -1,38 +1,105 @@
-import { Link } from 'react-router-dom';
+import { FiArrowLeft, FiCalendar, FiEye, FiTag } from "react-icons/fi";
+import moment from "moment";
+import { useNavigate, useParams } from "react-router-dom";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../components/Loading";
 
 const BlogDetailsPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
+
+  const {
+    data: blog,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["blogDetails", id],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/blog-details/${id}`);
+      return res.data;
+    },
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError || !blog) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-500 mb-2">
+            Error Loading Blog
+          </h2>
+          <button
+            onClick={() => navigate(-1)}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Blood Donation Blogs</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Blog Card 1 */}
-        <div className="border rounded-lg p-4 shadow-sm">
-          <img 
-            src="https://via.placeholder.com/300x200" 
-            alt="Blog" 
-            className="w-full h-40 object-cover mb-3"
-          />
-          <h3 className="text-lg font-semibold">Importance of Blood Donation</h3>
-          <p className="text-gray-600 mb-3">Blood donation saves lives. Learn how your contribution...</p>
-          <Link to="/blogs/1" className="text-red-600 hover:underline">
-            Read More
-          </Link>
+    <div className="bg-gray-50 min-h-screen">
+      {/* Back Button */}
+      <div className="max-w-7xl mx-auto pt-6 px-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-indigo-600 hover:text-indigo-800 mb-6"
+        >
+          <FiArrowLeft className="mr-2" />
+          Back to All Blogs
+        </button>
+      </div>
+
+      {/* Blog Content */}
+      <div className="max-w-4xl mx-auto px-4 pb-12">
+        {/* Blog Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {blog.title}
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-4 text-gray-600">
+            <div className="flex items-center">
+              <FiCalendar className="mr-2" />
+              <span>{moment(blog.createdAt).format("MMMM D, YYYY")}</span>
+            </div>
+            <div className="flex items-center">
+              <FiEye className="mr-2" />
+              <span>{blog.views || 0} views</span>
+            </div>
+            {blog.status && (
+              <div className="flex items-center">
+                <FiTag className="mr-2" />
+                <span className="capitalize">{blog.status}</span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Blog Card 2 */}
-        <div className="border rounded-lg p-4 shadow-sm">
-          <img 
-            src="https://via.placeholder.com/300x200" 
-            alt="Blog" 
-            className="w-full h-40 object-cover mb-3"
-          />
-          <h3 className="text-lg font-semibold">Donation Process Guide</h3>
-          <p className="text-gray-600 mb-3">Step-by-step guide to blood donation process...</p>
-          <Link to="/blogs/2" className="text-red-600 hover:underline">
-            Read More
-          </Link>
+        {/* Featured Image */}
+        {blog.image && (
+          <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
+            <img
+              src={blog.image}
+              alt={blog.title}
+              className="w-full h-auto max-h-96 object-cover"
+            />
+          </div>
+        )}
+
+        {/* Blog Content */}
+        <div className="prose max-w-none prose-lg">
+          <div dangerouslySetInnerHTML={{ __html: blog.content }} />
         </div>
+
+        
       </div>
     </div>
   );

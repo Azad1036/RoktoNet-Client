@@ -24,6 +24,8 @@ import ProfilePage from "./../pages/Dashboard/DonorDashboard/ProfilePage";
 import PrivateRouters from "./PrivateRouters";
 import EditDonationsRequest from "../pages/Dashboard/DonorDashboard/EditDonationsRequest";
 import ViewDetilesPage from "../pages/Dashboard/DonorDashboard/ViewDetilesPage";
+import EditBlogPosts from "../pages/EditBlogPost";
+
 
 const routers = createBrowserRouter([
   {
@@ -116,6 +118,14 @@ const routers = createBrowserRouter([
       {
         path: "content-management/add-blog",
         element: <AddBlogPage />,
+      },
+      {
+        path: "content-management/edit-blog",
+        element: <EditBlogPosts />,
+      },
+      {
+        path: "blog-details/:id",
+        element: <BlogDetailsPage />,
       },
 
       // Volunteer Page
